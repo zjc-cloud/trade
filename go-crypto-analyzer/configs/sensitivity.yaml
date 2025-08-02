@@ -1,0 +1,74 @@
+# 市场感知灵敏度配置
+# 根据不同的市场状况和需求调整参数
+
+# 推荐配置方案
+profiles:
+  # 高灵敏度 - 快速捕捉市场变化
+  sensitive:
+    interval: "15m"
+    limit: 100
+    indicators:
+      ma_periods: [5, 10, 20]      # 短期均线
+      rsi_period: 9                 # 更短的RSI周期
+      macd_fast: 8
+      macd_slow: 17
+      macd_signal: 9
+    description: "适合日内交易，快速反应"
+    
+  # 平衡模式 - 默认推荐
+  balanced:
+    interval: "1h"
+    limit: 100
+    indicators:
+      ma_periods: [5, 10, 20, 50]
+      rsi_period: 14
+      macd_fast: 12
+      macd_slow: 26
+      macd_signal: 9
+    description: "平衡灵敏度和稳定性"
+    
+  # 稳健模式 - 过滤噪音
+  stable:
+    interval: "4h"
+    limit: 100
+    indicators:
+      ma_periods: [10, 20, 50, 200]
+      rsi_period: 21
+      macd_fast: 12
+      macd_slow: 26
+      macd_signal: 9
+    description: "适合波段操作，信号稳定"
+
+# 市场状态判断
+market_conditions:
+  # 高波动市场
+  high_volatility:
+    recommended_profile: "sensitive"
+    characteristics:
+      - "价格快速变化"
+      - "成交量放大"
+      - "新闻事件频发"
+      
+  # 震荡市场
+  ranging:
+    recommended_profile: "balanced"
+    characteristics:
+      - "价格区间震荡"
+      - "成交量稳定"
+      - "趋势不明确"
+      
+  # 趋势市场
+  trending:
+    recommended_profile: "stable"
+    characteristics:
+      - "明确的上涨或下跌趋势"
+      - "均线多头或空头排列"
+      - "趋势持续时间较长"
+
+# 灵敏度调整建议
+sensitivity_tips:
+  - "牛市初期：使用sensitive配置，快速捕捉起涨信号"
+  - "牛市中期：使用balanced配置，既不错过机会也避免频繁交易"
+  - "牛市末期：使用stable配置，重点关注大级别转折"
+  - "熊市：使用stable配置，避免抄底过早"
+  - "重大事件前后：临时切换到sensitive配置"

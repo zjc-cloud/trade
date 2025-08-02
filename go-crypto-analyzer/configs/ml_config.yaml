@@ -1,0 +1,86 @@
+# 机器学习增强配置（未来扩展）
+# 记录历史验证结果，不断优化权重
+
+# 指标权重学习
+indicator_weights:
+  # 基础权重
+  base:
+    MA: 0.25
+    MACD: 0.25
+    RSI: 0.25
+    Volume: 0.25
+  
+  # 历史表现统计
+  performance:
+    MA:
+      success_rate: 0.65
+      avg_profit: 0.032
+      best_timeframe: "4h"
+    MACD:
+      success_rate: 0.58
+      avg_profit: 0.028
+      best_timeframe: "1h"
+    RSI:
+      success_rate: 0.62
+      avg_profit: 0.025
+      best_timeframe: "1h"
+      
+# 市场状态识别
+market_patterns:
+  # 牛市特征
+  bull_market:
+    indicators:
+      - "MA5 > MA20 > MA50"
+      - "RSI > 50"
+      - "持续放量"
+    weight_adjustments:
+      MA: +0.1
+      MACD: +0.05
+      
+  # 熊市特征  
+  bear_market:
+    indicators:
+      - "MA5 < MA20 < MA50"
+      - "RSI < 50"
+      - "成交量萎缩"
+    weight_adjustments:
+      RSI: +0.1
+      Volume: +0.05
+      
+  # 震荡市特征
+  ranging_market:
+    indicators:
+      - "MA5与MA20反复交叉"
+      - "ADX < 25"
+      - "价格在区间内"
+    weight_adjustments:
+      RSI: +0.15
+      Support_Resistance: +0.1
+
+# 自适应阈值
+adaptive_thresholds:
+  # RSI阈值根据市场调整
+  rsi:
+    bull_market:
+      overbought: 80  # 牛市中超买阈值更高
+      oversold: 35
+    bear_market:
+      overbought: 65
+      oversold: 20   # 熊市中超卖阈值更低
+    normal:
+      overbought: 70
+      oversold: 30
+      
+# 信号质量评分
+signal_quality:
+  high_quality:
+    - "多个指标同向"
+    - "成交量配合"
+    - "突破关键位置"
+  medium_quality:
+    - "部分指标同向"
+    - "成交量一般"
+  low_quality:
+    - "指标分歧"
+    - "成交量不配合"
+    - "假突破风险"

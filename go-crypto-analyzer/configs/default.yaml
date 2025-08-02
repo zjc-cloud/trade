@@ -1,0 +1,71 @@
+# 默认配置文件
+
+# 数据源配置
+datasource:
+  primary: "binance"
+  fallback: "yahoo"
+  
+# 默认分析参数
+analysis:
+  interval: "1h"
+  limit: 100
+  
+# 技术指标参数
+indicators:
+  ma:
+    periods: [5, 10, 20, 50, 200]
+  macd:
+    fast: 12
+    slow: 26
+    signal: 9
+  rsi:
+    period: 14
+  adx:
+    period: 14
+  bollinger:
+    period: 20
+    std_dev: 2.0
+    
+# 警报阈值
+alerts:
+  rsi:
+    oversold: 30
+    overbought: 70
+  volume:
+    high: 2.0
+    low: 0.5
+  price_change:
+    significant: 0.05  # 5%
+    
+# 显示配置
+display:
+  show_chart: true
+  chart_height: 10
+  chart_width: 60
+  max_evidences: 10
+  decimal_places:
+    price: 2
+    percent: 2
+    indicator: 1
+    
+# API限制
+rate_limits:
+  binance:
+    requests_per_minute: 1200
+    weight_per_minute: 6000
+  yahoo:
+    requests_per_minute: 60
+    
+# 日志配置
+logging:
+  level: "info"
+  file: "crypto-analyzer.log"
+  
+# 监控列表预设
+watchlists:
+  top3: ["BTCUSDT", "ETHUSDT", "BNBUSDT"]
+  defi_blue: ["UNIUSDT", "AAVEUSDT", "LINKUSDT", "MKRUSDT"]
+  layer2: ["ARBUSDT", "OPUSDT", "MATICUSDT"]
+  trending: ["SOLUSDT", "AVAXUSDT", "INJUSDT", "TIAUSDT"]
+  meme: ["DOGEUSDT", "SHIBUSDT", "PEPEUSDT"]
+  ai: ["FETUSDT", "RNDRUSDT", "AGIXUSDT", "OCEANUSDT"]
