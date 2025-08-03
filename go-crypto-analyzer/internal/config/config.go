@@ -46,12 +46,10 @@ var CryptoConfig = map[string]types.CryptoConfig{
 
 // Watchlists defines preset watchlists
 var Watchlists = map[string][]string{
-	"top3":       {"BTCUSDT", "ETHUSDT", "BNBUSDT"},
-	"defi_blue":  {"UNIUSDT", "AAVEUSDT", "LINKUSDT", "MKRUSDT"},
-	"layer2":     {"ARBUSDT", "OPUSDT", "MATICUSDT"},
-	"trending":   {"SOLUSDT", "AVAXUSDT", "INJUSDT", "TIAUSDT"},
-	"meme":       {"DOGEUSDT", "SHIBUSDT", "PEPEUSDT"},
-	"ai":         {"FETUSDT", "RNDRUSDT", "AGIXUSDT", "OCEANUSDT"},
+	"top3":   {"BTCUSDT", "ETHUSDT", "BNBUSDT"},
+	"top10":  {"BTCUSDT", "ETHUSDT", "BNBUSDT", "SOLUSDT", "ADAUSDT", "AVAXUSDT", "DOTUSDT", "MATICUSDT", "LINKUSDT", "NEARUSDT"},
+	"defi":   {"UNIUSDT", "AAVEUSDT", "LINKUSDT", "MKRUSDT"},
+	"layer1": {"ETHUSDT", "SOLUSDT", "AVAXUSDT", "ADAUSDT", "DOTUSDT"},
 }
 
 // GetWatchlist returns a watchlist by name
@@ -60,10 +58,4 @@ func GetWatchlist(name string) []string {
 		return list
 	}
 	return Watchlists["top3"]
-}
-
-// GetCryptoConfig returns config for a specific cryptocurrency
-func GetCryptoConfig(symbol string) (types.CryptoConfig, bool) {
-	config, ok := CryptoConfig[symbol]
-	return config, ok
 }

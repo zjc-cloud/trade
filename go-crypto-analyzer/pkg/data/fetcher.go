@@ -92,14 +92,36 @@ func (yf *YahooFinanceFetcher) FetchOHLCV(symbol string, interval string, limit 
 		yfSymbol = symbol
 	}
 
-	// Calculate time range
+	// Calculate time range based on interval
 	endTime := time.Now().Unix()
-	startTime := endTime - int64(limit*86400) // Approximate based on daily candles
+	var duration int64
+	switch interval {
+	case "1m":
+		duration = 60
+	case "5m":
+		duration = 300
+	case "15m":
+		duration = 900
+	case "30m":
+		duration = 1800
+	case "1h", "60m":
+		duration = 3600
+	case "4h":
+		duration = 14400
+	case "1d":
+		duration = 86400
+	default:
+		duration = 3600 // default to 1 hour
+	}
+	startTime := endTime - int64(limit)*duration
 
 	url := fmt.Sprintf(
 		"https://query1.finance.yahoo.com/v8/finance/chart/%s?period1=%d&period2=%d&interval=%s",
 		yfSymbol, startTime, endTime, yf.mapInterval(interval),
 	)
+
+	// Add delay to avoid rate limiting
+	time.Sleep(500 * time.Millisecond)
 
 	resp, err := yf.client.Get(url)
 	if err != nil {
@@ -114,7 +136,15 @@ func (yf *YahooFinanceFetcher) FetchOHLCV(symbol string, interval string, limit 
 
 	// Check response status
 	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("API returned status %d: %s", resp.StatusCode, string(body))
+		// Provide more context for common errors
+		switch resp.StatusCode {
+		case 429:
+			return nil, fmt.Errorf("API rate limit exceeded (429). Please wait a few minutes before retrying")
+		case 404:
+			return nil, fmt.Errorf("Symbol not found (404). Please check the symbol format (e.g., BTC-USD)")
+		default:
+			return nil, fmt.Errorf("API returned status %d: %s", resp.StatusCode, http.StatusText(resp.StatusCode))
+		}
 	}
 
 	var result YahooResponse
